@@ -1,0 +1,2061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart'Z Findery</title>
+  <!-- Google Fonts Import -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Global Body Styles */
+    body {
+      font-family: 'Inter', sans-serif; /* Modern, clean font for body text */
+      margin: 0;
+      padding: 0;
+      background-color: #E1ccc7; /* Updated background color */
+      color: #333; /* Darker text for contrast */
+      transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for dark mode */
+    }
+
+    /* --- Header Styling --- */
+    header {
+      /* Dynamic and appealing gradient */
+      background: linear-gradient(135deg, #800000 0%, #a00000 100%); /* Updated to maroon gradient */
+      color: #fff;
+      padding: 18px 30px; /* More vertical padding */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      /* Enhanced shadow for depth */
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      position: sticky; /* Makes the header stick to the top when scrolling */
+      top: 0;
+      z-index: 1000; /* Ensures header stays on top of most elements */
+      /* Glassmorphism effect */
+      backdrop-filter: blur(8px); /* Frosted glass effect */
+      -webkit-backdrop-filter: blur(8px); /* For Safari compatibility */
+      background-color: rgba(128, 0, 0, 0.7); /* Slightly transparent background for blur effect */
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border for glass look */
+    }
+
+    header .logo {
+      font-family: 'Montserrat', sans-serif; /* Modern, clean font */
+      font-size: 2.3em; /* Larger logo text */
+      font-weight: 700; /* Bolder */
+      letter-spacing: 1px; /* Slight letter spacing */
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* More pronounced text shadow */
+    }
+
+    header nav {
+        display: flex;
+        align-items: center;
+    }
+
+    header nav a,
+    header nav button {
+      color: #fff;
+      margin-left: 28px; /* More space between nav items */
+      text-decoration: none;
+      background: #800000; /* Updated to maroon */
+      border: none;
+      cursor: pointer;
+      font-size: 1.1em; /* Slightly larger font */
+      padding: 10px 18px;
+      border-radius: 30px; /* More rounded, pill-shaped buttons/links */
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* Smooth transitions */
+      font-weight: 500;
+      display: flex; /* Allow content inside to be flexed (for icons) */
+      align-items: center; /* Vertically align text and icon */
+      gap: 8px; /* Space between icon and text */
+    }
+
+    header nav a:hover,
+    header nav button:hover {
+      background-color: #a00000; /* Darker maroon on hover */
+      transform: translateY(-3px); /* More pronounced lift effect */
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* Stronger shadow on hover */
+    }
+
+    /* SVG icon styling within nav links */
+    header nav a svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor; /* Inherit color from parent */
+    }
+
+    /* --- Dark Mode Styling --- */
+    body.dark-mode {
+      background-color: #121212; /* Deeper dark mode background */
+      color: #e0e0e0; /* Lighter text in dark mode */
+    }
+
+    body.dark-mode header {
+      background: linear-gradient(135deg, #4d0000 0%, #660000 100%); /* Darker gradient for dark mode */
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background-color: rgba(77, 0, 0, 0.7);
+      border-bottom-color: rgba(255, 255, 255, 0.05);
+    }
+
+    body.dark-mode header nav a:hover,
+    body.dark-mode header nav button:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+    }
+
+    body.dark-mode .toolbar {
+      background: #252525;
+      color: #e0e0e0;
+      border-bottom: 1px solid #333;
+    }
+
+    body.dark-mode .toolbar input,
+    body.dark-mode .toolbar select {
+      background-color: #333;
+      color: #e0e0e0;
+      border: 1px solid #555;
+    }
+    body.dark-mode .toolbar select option {
+        background-color: #333; /* Ensure dropdown options are readable in dark mode */
+        color: #e0e0e0;
+    }
+
+    body.dark-mode .product-card {
+      background-color: #2c2c2c; /* Darker cards in dark mode */
+      color: #e0e0e0;
+      border-color: #444;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* More pronounced shadow in dark mode */
+    }
+
+    body.dark-mode .product-card button {
+      background-color: #444;
+      color: #eee;
+    }
+
+    body.dark-mode .product-card button:hover {
+      background-color: #555;
+    }
+
+    body.dark-mode footer {
+      background: #252525;
+      color: #e0e0e0;
+      border-top: 1px solid #333;
+    }
+
+    /* --- Toolbar Styling --- */
+    .toolbar {
+      padding: 20px 25px;
+      background: #f0f0f0; /* Slightly darker toolbar */
+      display: flex;
+      gap: 15px; /* Increased gap */
+      flex-wrap: wrap;
+      align-items: center;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .toolbar input[type="text"],
+    .toolbar select {
+      padding: 10px 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1em;
+      flex-grow: 1; /* Allow inputs to grow */
+      max-width: 300px; /* Max width for search input */
+    }
+
+    .toolbar select {
+      cursor: pointer;
+      background-color: #fff;
+    }
+
+    /* --- Subcategory Cards Container --- */
+    #subcategoryCardsContainer {
+      display: flex;
+      justify-content: center;
+      gap: 20px; /* Space between cards */
+      padding: 20px 25px;
+      background-color: #f0f0f0; /* Match toolbar background */
+      border-bottom: 1px solid #e0e0e0;
+      flex-wrap: wrap; /* Allow cards to wrap on smaller screens */
+    }
+
+    .subcategory-card {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 15px 25px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1.1em;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      min-width: 120px; /* Ensure cards have some width */
+    }
+
+    .subcategory-card:hover {
+      background-color: #f8e1e1; /* Lighter maroon on hover */
+      border-color: #800000; /* Maroon border on hover */
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .subcategory-card.active {
+      background-color: #800000; /* Active maroon background */
+      color: white;
+      border-color: #800000; /* Active maroon border */
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    body.dark-mode #subcategoryCardsContainer {
+      background-color: #252525;
+      border-bottom-color: #333;
+    }
+
+    body.dark-mode .subcategory-card {
+      background-color: #333;
+      color: #e0e0e0;
+      border-color: #555;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    body.dark-mode .subcategory-card:hover {
+      background-color: #4a4a4a;
+      border-color: #a00000; /* Darker maroon on hover */
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    body.dark-mode .subcategory-card.active {
+      background-color: #a00000; /* Darker maroon active */
+      color: #121212;
+      border-color: #a00000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    /* --- Product Grid Styling --- */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Slightly larger min-width for cards */
+      gap: 25px; /* Increased gap between cards */
+      padding: 25px;
+    }
+
+    .product-card {
+      border: 1px solid #e0e0e0; /* Lighter border */
+      border-radius: 10px; /* Rounded card corners */
+      padding: 15px;
+      text-align: center;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Soft shadow */
+      transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smooth hover effect */
+      display: flex; /* Make cards a flex container */
+      flex-direction: column; /* Stack content vertically */
+      justify-content: space-between; /* Distribute space */
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px); /* Lift effect on hover */
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* More pronounced shadow on hover */
+    }
+
+    .product-card img {
+      max-width: 100%;
+      height: 180px; /* Fixed height for images */
+      object-fit: contain; /* Ensure images fit without cropping oddly */
+      margin-bottom: 10px;
+      border-radius: 5px; /* Slightly rounded image corners */
+    }
+
+    .product-card h3 {
+      font-size: 1.2em;
+      margin: 10px 0;
+      color: #333;
+    }
+
+    .product-card p {
+      font-size: 1.1em;
+      font-weight: bold;
+      color: #800000; /* Price color updated to maroon */
+      margin-bottom: 15px;
+    }
+
+    body.dark-mode .product-card h3 {
+      color: #e0e0e0;
+    }
+
+    body.dark-mode .product-card p {
+      color: #a00000; /* Lighter maroon for price in dark mode */
+    }
+
+    .product-card button {
+      background: #800000; /* Primary action color - Updated to maroon */
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+      margin-top: auto; /* Push button to the bottom */
+    }
+
+    .product-card button:hover {
+      background: #a00000; /* Darker maroon on hover */
+    }
+
+    /* --- Footer Styling --- */
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #e9ecef; /* Lighter footer background */
+      color: #555;
+      border-top: 1px solid #e0e0e0;
+      margin-top: 30px; /* Space above footer */
+    }
+
+    footer .footer-links {
+        margin-top: 10px;
+        font-size: 0.9em;
+    }
+
+    footer .footer-links a {
+        color: #800000; /* Updated to maroon */
+        text-decoration: none;
+        margin: 0 8px;
+        transition: color 0.2s ease;
+    }
+
+    footer .footer-links a:hover {
+        color: #a00000; /* Darker maroon on hover */
+    }
+
+    body.dark-mode footer {
+        background: #252525;
+        color: #e0e0e0;
+        border-top: 1px solid #333;
+    }
+
+    body.dark-mode footer .footer-links a {
+        color: #a00000; /* Lighter maroon for dark mode */
+    }
+
+    body.dark-mode footer .footer-links a:hover {
+        color: #c00000; /* Even lighter maroon on hover in dark mode */
+    }
+
+
+    /* --- Login Form Overlay --- */
+    #loginFormOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7); /* Slightly darker overlay */
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000; /* Higher z-index for overlay */
+      backdrop-filter: blur(5px); /* Subtle blur effect */
+      -webkit-backdrop-filter: blur(5px);
+    }
+
+    #loginForm {
+      background: #fff;
+      padding: 30px 40px; /* More padding */
+      border-radius: 12px;
+      max-width: 400px;
+      width: 90%;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    body.dark-mode #loginForm {
+      background: #252525;
+      color: #e0e0e0;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    body.dark-mode #loginForm input {
+      background-color: #333;
+      color: #e0e0e0;
+      border-color: #555;
+    }
+
+    body.dark-mode #loginForm .close-btn {
+      color: #e0e0e0;
+    }
+
+    #loginForm h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-size: 2em;
+      color: #333;
+      text-align: center;
+    }
+
+    body.dark-mode #loginForm h2 {
+      color: #e0e0e0;
+    }
+
+    #loginForm label {
+      display: block;
+      margin: 15px 0 8px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    body.dark-mode #loginForm label {
+      color: #e0e0e0;
+    }
+
+    #loginForm input {
+      width: 100%;
+      padding: 12px;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 1.05em;
+    }
+
+    #loginForm button {
+      width: 100%;
+      padding: 12px;
+      background: #800000; /* Updated to maroon */
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1em;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    #loginForm button:hover {
+      background: #a00000; /* Darker maroon on hover */
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: light;
+      color: #666;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .close-btn:hover {
+      color: #333;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 25px;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+    }
+
+    body.dark-mode .social-icons {
+      border-top: 1px solid #444;
+    }
+
+    .social-icons img {
+      width: 38px;
+      height: 38px;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+      border-radius: 50%;
+    }
+
+    .social-icons img:hover {
+      transform: scale(1.15);
+      opacity: 0.8;
+    }
+
+    /* --- Animations --- */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* --- Floating Cart Icon --- */
+    #floatingCart {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background-color: #800000; /* Updated to maroon */
+        color: white;
+        font-size: 2em; /* Smaller icon */
+        padding: 15px 18px; /* Reduced padding */
+        border-radius: 50%;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Adjusted shadow */
+        cursor: pointer;
+        z-index: 999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        border: 3px solid #fff; /* Adjusted border */
+    }
+
+    #floatingCart:hover {
+        background-color: #a00000; /* Darker maroon on hover */
+        transform: scale(1.1) rotate(5deg); /* Adjusted hover effect */
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+        border-color: #eee;
+    }
+
+    /* Dark mode adjustments for floating cart */
+    body.dark-mode #floatingCart {
+        background-color: #660000; /* Darker maroon for dark mode */
+        color: #e0e0e0;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.6);
+        border-color: #333;
+    }
+
+    body.dark-mode #floatingCart:hover {
+        background-color: #800000; /* Slightly lighter maroon on hover in dark mode */
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
+        border-color: #555;
+    }
+
+    /* Cart Counter */
+    #floatingCart .cart-count {
+      position: absolute;
+      top: -8px; /* Adjusted position */
+      right: -8px; /* Adjusted position */
+      background-color: #ff0000; /* Bright red badge */
+      color: white;
+      font-size: 0.6em; /* Smaller font relative to cart icon */
+      padding: 5px 9px; /* Reduced padding for badge */
+      border-radius: 50%;
+      min-width: 15px; /* Ensures circular shape for single digit */
+      text-align: center;
+      line-height: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 700;
+      border: 2px solid white; /* Adjusted border for badge */
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* Adjusted shadow for badge */
+    }
+    body.dark-mode #floatingCart .cart-count {
+        border-color: #222;
+    }
+
+
+    /* --- Cart Container Overlay Styling --- */
+    .cart-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7); /* Dark overlay */
+      display: none; /* Hidden by default */
+      justify-content: center;
+      align-items: center;
+      z-index: 1500; /* Above regular content, below login form */
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      overflow-y: auto; /* Allow scrolling if cart content is long */
+      padding: 20px; /* Padding for mobile view */
+      box-sizing: border-box;
+    }
+
+    body.dark-mode .cart-container {
+        background: rgba(0, 0, 0, 0.85);
+    }
+
+    .cart-content {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 900px; /* Wider for cart content */
+      width: 95%; /* Responsive width */
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      position: relative;
+      display: flex; /* Flexbox for main cart layout */
+      flex-direction: column; /* Stack header, items, summary */
+      gap: 20px; /* Space between cart sections */
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    body.dark-mode .cart-content {
+        background: #2c2c2c;
+        color: #e0e0e0;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .breadcrumb {
+      font-size: 0.9em;
+      color: #777;
+      margin-bottom: 15px;
+    }
+    body.dark-mode .breadcrumb {
+        color: #aaa;
+    }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #eee;
+    }
+    body.dark-mode .cart-header {
+        border-bottom-color: #444;
+    }
+
+    .cart-header h2 {
+      margin: 0;
+      font-size: 2em;
+      color: #333;
+    }
+    body.dark-mode .cart-header h2 {
+        color: #e0e0e0;
+    }
+
+    .cart-header .continue-btn {
+      background: #6c757d; /* Grey continue button */
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background-color 0.3s ease;
+    }
+
+    .cart-header .continue-btn:hover {
+      background: #5a6268;
+    }
+
+    /* Cart Items List */
+    .cart-items-list {
+      flex-grow: 1; /* Allows the list to take available space */
+      display: flex;
+      flex-direction: column;
+      gap: 15px; /* Space between individual cart items */
+      min-height: 100px; /* To prevent collapse if empty */
+    }
+
+    .cart-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border: 1px solid #f0f0f0;
+        border-radius: 8px;
+        background-color: #fcfcfc;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    }
+    body.dark-mode .cart-item {
+        background-color: #3a3a3a;
+        border-color: #555;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .cart-item img {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        border-radius: 5px;
+        margin-right: 15px;
+    }
+
+    .cart-item-details {
+        flex-grow: 1;
+    }
+
+    .cart-item-details h4 {
+        margin: 0 0 5px 0;
+        font-size: 1.1em;
+        color: #333;
+    }
+    body.dark-mode .cart-item-details h4 {
+        color: #e0e0e0;
+    }
+
+    .cart-item-details p {
+        margin: 0;
+        font-size: 0.9em;
+        color: #666;
+    }
+    body.dark-mode .cart-item-details p {
+        color: #bbb;
+    }
+
+    .cart-item-quantity {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-right: 20px;
+    }
+
+    .cart-item-quantity input {
+        width: 50px;
+        padding: 5px;
+        text-align: center;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1em;
+        background-color: #fff;
+        color: #333;
+    }
+    body.dark-mode .cart-item-quantity input {
+        background-color: #4a4a4a;
+        border-color: #666;
+        color: #e0e0e0;
+    }
+
+    .cart-item-quantity button {
+        background-color: #800000; /* Updated to maroon */
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1em;
+        transition: background-color 0.2s ease;
+    }
+    .cart-item-quantity button:hover {
+        background-color: #a00000; /* Darker maroon on hover */
+    }
+    body.dark-mode .cart-item-quantity button {
+        background-color: #660000; /* Darker maroon for dark mode */
+        color: #e0e0e0;
+    }
+    body.dark-mode .cart-item-quantity button:hover {
+        background-color: #800000; /* Slightly lighter maroon on hover in dark mode */
+    }
+
+    .cart-item-total-price {
+        font-weight: bold;
+        font-size: 1.1em;
+        color: #800000; /* Price color updated to maroon */
+        margin-left: auto; /* Push to the right */
+        min-width: 80px; /* Ensure space for price */
+        text-align: right;
+    }
+    body.dark-mode .cart-item-total-price {
+        color: #a00000; /* Lighter maroon for dark mode */
+    }
+
+    .remove-item-btn {
+        background: none;
+        border: none;
+        font-size: 1.5em;
+        color: #dc3545; /* Red for remove */
+        cursor: pointer;
+        padding: 5px;
+        margin-left: 15px; /* Space from price */
+        transition: color 0.2s ease;
+    }
+    .remove-item-btn:hover {
+        color: #c82333;
+    }
+    body.dark-mode .remove-item-btn {
+        color: #ff7f7f;
+    }
+    body.dark-mode .remove-item-btn:hover {
+        color: #ff5555;
+    }
+
+
+    .cart-empty {
+      text-align: center;
+      padding: 50px 0;
+      color: #777;
+    }
+    body.dark-mode .cart-empty {
+        color: #aaa;
+    }
+
+    .order-summary {
+      background: #f8f8f8;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    body.dark-mode .order-summary {
+        background: #3a3a3a;
+        border-color: #555;
+    }
+
+    .order-summary h4 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      font-size: 1.3em;
+      color: #333;
+    }
+    body.dark-mode .order-summary h4 {
+        color: #e0e0e0;
+    }
+
+    .discount-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .discount-row input {
+      flex-grow: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background-color: #fff;
+      color: #333;
+    }
+    body.dark-mode .discount-row input {
+        background-color: #4a4a4a;
+        border-color: #666;
+        color: #e0e0e0;
+    }
+
+    .discount-row button {
+      background: #800000; /* Updated to maroon */
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .discount-row button:hover {
+      background: #a00000; /* Darker maroon on hover */
+    }
+    body.dark-mode .discount-row button {
+        background-color: #660000; /* Darker maroon for dark mode */
+        color: #e0e0e0;
+    }
+    body.dark-mode .discount-row button:hover {
+        background-color: #800000; /* Slightly lighter maroon on hover in dark mode */
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 0;
+      font-size: 1em;
+      color: #555;
+    }
+    body.dark-mode .summary-item {
+        color: #bbb;
+    }
+
+    .summary-item.total {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #333;
+      border-top: 1px solid #eee;
+      padding-top: 15px;
+      margin-top: 10px;
+    }
+    body.dark-mode .summary-item.total {
+        color: #e0e0e0;
+        border-top-color: #444;
+    }
+
+    .checkout-btn {
+      background: #800000; /* Checkout button updated to maroon */
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1.1em;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+      margin-top: 15px;
+    }
+
+    .checkout-btn:hover {
+      background: #a00000; /* Darker maroon on hover */
+    }
+
+    /* --- Payment Form Section Styling --- */
+    .payment-form-section {
+        padding: 20px;
+        background: #f8f8f8;
+        border-radius: 10px;
+        border: 1px solid #eee;
+        margin-top: 10px;
+    }
+
+    body.dark-mode .payment-form-section {
+        background: #3a3a3a;
+        border-color: #555;
+    }
+
+    .payment-form-section h4 {
+        text-align: center;
+        color: #333;
+        margin-top: 0;
+        margin-bottom: 20px;
+    }
+    body.dark-mode .payment-form-section h4 {
+        color: #e0e0e0;
+    }
+
+    .payment-form-section label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+        color: #555;
+    }
+    body.dark-mode .payment-form-section label {
+        color: #e0e0e0;
+    }
+
+    .payment-form-section input[type="text"],
+    .payment-form-section input[type="email"],
+    .payment-form-section input[type="tel"],
+    .payment-form-section select {
+        width: calc(100% - 20px); /* Adjust for padding */
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 1em;
+        box-sizing: border-box; /* Include padding in width */
+        background-color: #fff;
+        color: #333;
+    }
+    body.dark-mode .payment-form-section input[type="text"],
+    body.dark-mode .payment-form-section input[type="email"],
+    body.dark-mode .payment-form-section input[type="tel"],
+    body.dark-mode .payment-form-section select {
+        background-color: #4a4a4a;
+        border-color: #666;
+        color: #e0e0e0;
+    }
+
+    .payment-form-section select option {
+        background-color: #fff; /* For light mode dropdown options */
+        color: #333;
+    }
+
+    body.dark-mode .payment-form-section select option {
+        background-color: #4a4a4a; /* For dark mode dropdown options */
+        color: #e0e0e0;
+    }
+
+    .payment-form-section button.checkout-btn { /* Style for Place Order button */
+        margin-top: 20px;
+        width: 100%;
+    }
+
+    #orderConfirmationMessage {
+        background-color: #e6ffe6;
+        border: 1px solid #a3e6a3;
+        color: #006400;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+        font-size: 1.1em;
+    }
+
+    body.dark-mode #orderConfirmationMessage {
+        background-color: #1a4d1a;
+        border-color: #338533;
+        color: #90ee90;
+    }
+
+    #orderConfirmationMessage h4 {
+        color: #004d00;
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    body.dark-mode #orderConfirmationMessage h4 {
+        color: #c0ffc0;
+    }
+
+
+    /* --- Responsive Adjustments --- */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        padding: 15px 20px;
+        text-align: center;
+      }
+
+      header .logo {
+        margin-bottom: 15px;
+        font-size: 1.8em;
+      }
+
+      header nav {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      header nav a,
+      header nav button {
+        margin: 0 5px;
+        padding: 8px 12px;
+        font-size: 0.95em;
+        gap: 6px;
+      }
+
+      .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 15px;
+      }
+
+      .toolbar input,
+      .toolbar select {
+        max-width: 100%;
+      }
+
+      #subcategoryCardsContainer {
+        padding: 15px;
+        gap: 10px;
+      }
+
+      .subcategory-card {
+        min-width: unset;
+        flex-grow: 1;
+        padding: 12px 18px;
+        font-size: 1em;
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 15px;
+        padding: 15px;
+      }
+
+      .product-card {
+        padding: 12px;
+      }
+
+      .product-card img {
+        height: 150px;
+      }
+
+      #loginForm {
+        padding: 25px 30px;
+      }
+
+      #floatingCart {
+          bottom: 20px;
+          right: 20px;
+          font-size: 1.8em;
+          padding: 12px 16px;
+      }
+      #floatingCart .cart-count {
+          font-size: 0.7em;
+          padding: 3px 6px;
+          top: -6px;
+          right: -6px;
+      }
+
+      .cart-content {
+          padding: 15px;
+          gap: 15px;
+      }
+
+      .cart-item {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+      }
+
+      .cart-item img {
+          margin-right: 0;
+          margin-bottom: 10px;
+      }
+
+      .cart-item-details {
+          width: 100%;
+      }
+
+      .cart-item-quantity {
+          width: 100%;
+          justify-content: space-between;
+          margin-right: 0;
+      }
+
+      .cart-item-total-price {
+          width: 100%;
+          text-align: left;
+          margin-left: 0;
+          margin-top: 10px;
+      }
+
+      .remove-item-btn {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+          margin-left: 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+        header nav {
+            flex-direction: column;
+            gap: 8px;
+        }
+        header nav a,
+        header nav button {
+            margin: 0;
+            width: 80%;
+            max-width: 200px;
+        }
+
+      #subcategoryCardsContainer {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .subcategory-card {
+          max-width: 100%;
+      }
+
+      .product-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .social-icons {
+        gap: 15px;
+      }
+
+      .social-icons img {
+        width: 30px;
+        height: 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">Smart'Z Findery</div>
+    <nav>
+      <a href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+        </svg>
+        Home
+      </a>
+      <a href="#" onclick="showCart()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2S15.9 22 17 22s2-.9 2-2-.9-2-2-2zm-8.7-7l.48-1.04L13.2 13h1.86l.66-1.32L17.77 8H10l-1-2H4V4h-.7c-.66 0-1.16.54-1.16 1.2s.5 1.2 1.16 1.2H4L6 14.5c.18 1.1 1.13 1.9 2.22 1.9h8.21c1.09 0 2.04-.8 2.22-1.9L22 6.5h-5.27l-2.5 5.5z"/>
+        </svg>
+        Cart
+      </a>
+      <a href="#" id="loginLogoutLink" onclick="handleLoginLogout()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+        </svg>
+        Login
+      </a>
+      <button onclick="toggleDarkMode()">🌙</button>
+    </nav>
+  </header>
+
+  <section class="toolbar">
+    <input type="text" id="searchInput" placeholder="Search products...">
+    <select id="categoryFilter">
+      <!-- Options will be dynamically populated by JavaScript -->
+    </select>
+    <select id="sortSelect">
+      <option value="default">Sort By</option>
+      <option value="low-high">Price: Low to High</option>
+      <option value="high-low">Price: High to Low</option>
+    </select>
+  </section>
+
+  <!-- New Subcategory Cards Section -->
+  <section id="subcategoryCardsContainer">
+    <div class="subcategory-card" data-filter="men">Men</div>
+    <div class="subcategory-card" data-filter="women">Women</div>
+    <div class="subcategory-card" data-filter="kids">Kids</div>
+  </section>
+
+  <section class="product-grid" id="productGrid">
+    <!-- Each product card needs a unique data-product-id -->
+    <div class="product-card" data-product-id="prod-001" data-category="men-shirt" data-price="2000">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR1yTO7esNg3Id3pA5WhpfYRA1KSsOx075-EQ&s" alt="FILA Casual Shirt" onerror="this.onerror=null;this.src='https://placehold.co/200x180/E0E0E0/333333?text=Image+Missing';">
+      <h3>FILA Casual Shirt</h3>
+      <p>BDT 2000</p>
+      <button class="add-to-cart-btn">Add to Cart</button>
+    </div>
+    <div class="product-card" data-product-id="prod-002" data-category="women-dress" data-price="85">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxJr3yZWQC8GIFgcaCMPoT2-Ri1xbiUlul8g&s" alt="Kaleidoscopeb Summer Dress" onerror="this.onerror=null;this.src='https://placehold.co/200x180/E0E0E0/333333?text=Image+Missing';">
+      <h3> Kaleidoscopeb Summer Dress</h3>
+      <p>BDT 85</p>
+      <button class="add-to-cart-btn">Add to Cart</button>
+    </div>
+    <div class="product-card" data-product-id="prod-003" data-category="kids-tshirt" data-price="800">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9Sr26dic8RsvoaALCC5-NrnZH3k6rrRlUJA&s" alt="Kangaroos corton Kids T-shirt" onerror="this.onerror=null;this.src='https://placehold.co/200x180/E0E0E0/333333?text=Image+Missing';">
+      <h3>Kangaroos corton Kids T-shirt</h3>
+      <p>BDT 800</p>
+      <button class="add-to-cart-btn">Add to Cart</button>
+    </div>
+    <div class="product-card" data-product-id="prod-004" data-category="electronics" data-price="1500">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzgDKpwA9wLf4fE_5opmsUudpsc4l3FNWM6w&s" alt="beyerdynamic-300 Wireless Headphones" onerror="this.onerror=null;this.src='https://placehold.co/200x180/E0E0E0/333333?text=Image+Missing';">
+      <h3>beyerdynamic-300 Wireless Headphones</h3>
+      <p>BDT 1500+VAT</p>
+      <button class="add-to-cart-btn">Add to Cart</button>
+    </div>
+    <div class="product-card" data-product-id="prod-005" data-category="electronics" data-price="10000">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcST6ULRevmuTNy3ji3BO2vGHmyUgtnC2yp3tw&s" alt="FTTMWTAG Smart-Watch" onerror="this.onerror=null;this.src='https://placehold.co/200x180/E0E0E0/333333?text=Image+Missing';">
+      <h3>FTTMWTAG Smart-Watch</h3>
+      <p>BDT 10000</p>
+      <button class="add-to-cart-btn">Add to Cart</button>
+    </div>
+    <div class="product-card" data-product-id="prod-006" data-category="beauty" data-price="1500">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRY6x2_hiJPr-g33u3Jk5oi7oL4vSJ1APjoA&s" alt="MAC POWDER KISS MINI LIPSTICK" onerror="this.onerror=null;this.src='https://placehold.co/200x180/E0E0E0/333333?text=Image+Missing';">
+      <h3>MAC POWDER KISS MINI LIPSTICK</h3>
+      <p>BDT 1500+VAT</p>
+      <button class="add-to-cart-btn">Add to Cart</button>
+    </div>
+    <div class="product-card" data-product-id="prod-007" data-category="toy" data-price="500">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSARcCQnHlM04aBHNP6RFqdVwIGlLg-TuT-gw&s" alt="Taddy Toy" onerror="this.onerror=null;this.src='https://placehold.co/200x180/E0E0E0/333333?text=Image+Missing';">
+      <h3>taddy toy</h3>
+      <p>BDT 500</p>
+      <button class="add-to-cart-btn">Add to Cart</button>
+    </div>
+    <div class="product-card" data-product-id="prod-008" data-category="women-threepiece" data-price="3000">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPUSUGjoP9K2i0w1OZ3uKwSWs4xoFZF-_JZQ&s" alt="Vinoy Three piece" onerror="this.onerror=null;this.src='https://placehold.co/200x180/E0E0E0/333333?text=Image+Missing';">
+      <h3> Vinoy Three piece</h3>
+      <p>BDT 3000+VAT</p>
+      <button class="add-to-cart-btn">Add to Cart</button>
+    </div>
+    <div class="product-card" data-product-id="prod-009" data-category="men-pant" data-price="2000">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyD3mLBqygbVLnKCoMQgzBFOUhnywEWGKKhg&s" alt="Formal Pant" onerror="this.onerror=null;this.src='https://placehold.co/200x180/E0E0E0/333333?text=Image+Missing';">
+      <h3>Arrow Formal Pant</h3>
+      <p>BDT 2000+VAT</p>
+      <button class="add-to-cart-btn">Add to Cart</button>
+    </div>
+    <div class="product-card" data-product-id="prod-010" data-category="women-watch" data-price="1200">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbPgNCps0U59-9ul7cbFVypicnMFOFVhJHGA&s" alt="Chain Watch" onerror="this.onerror=null;this.src='https://placehold.co/200x180/E0E0E0/333333?text=Image+Missing';">
+      <h3> Girl's Chain Watch</h3>
+      <p>BDT 1200+VAT</p>
+      <button class="add-to-cart-btn">Add to Cart</button>
+    </div>
+    <div class="product-card" data-product-id="prod-011" data-category="men-shoe" data-price="6000">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqFSu2jfN80rjhtAKPo2nYU3q2q3PBVxEsuw&s" alt="Nike Shoes" onerror="this.onerror=null;this.src='https://placehold.co/200x180/E0E0E0/333333?text=Image+Missing';">
+      <h3>Nike Mens Air Force 1 '07 Shoes</h3>
+      <p>BDT 6000+VAT</p>
+      <button class="add-to-cart-btn">Add to Cart</button>
+    </div>
+    <div class="product-card" data-product-id="prod-012" data-category="men-polo-tshirt" data-price="1000">
+      <img src="https://www.siatex.com/wp-content/uploads/2023/05/Anti-wrinkle-Men-Polo-T-shirts-Manufacturer-in-Bangladesh.webp" alt="Polo t-Shirt" onerror="this.onerror=null;this.src='https://placehold.co/200x180/E0E0E0/333333?text=Image+Missing';">
+      <h3>half Sleeve Cotton Pk Fabric Brand- polo T-Shirt</h3>
+      <p>BDT 1000+VAT</p>
+      <button class="add-to-cart-btn">Add to Cart</button>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Smart'Z Findery. All rights reserved.</p>
+    <div class="footer-links">
+        <a href="#">About Us</a> |
+        <a href="#">Contact Us</a> |
+        <a href="#">Privacy Policy</a>
+    </div>
+  </footer>
+
+  <!-- Login Form Overlay -->
+  <div id="loginFormOverlay">
+    <div id="loginForm">
+      <span class="close-btn" onclick="closeLoginForm()">×</span>
+      <h2>Login</h2>
+      <label for="loginEmailOrNumber">Email or Number</label>
+      <input type="text" id="loginEmailOrNumber" placeholder="Enter your email or number" />
+      <label for="loginPassword">Password</label>
+      <input type="password" id="loginPassword" placeholder="Enter your password" />
+      <button id="loginButton">Login</button>
+      <div class="social-icons">
+        <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw8PDw0NDQ4PDw0NDg8ODw0PDhAQDg8QFREWFhURFRYYHSggGBolGxUTITEtJikrLjoxFx8zOD8sNygtLysBCgoKDg0OGhAQGy8mHyAtKy0rLy0tLS0vLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLf/AABEIAJkBSQMBEQACEQEDEQH/xAAZAAEAAgMBAQAAAAAAAAAAAAAAAQYDBQcEAv/EAEQQAAICAAIFBgkHDAMBAAAAAAABAgMEEQUGEiExE0FRYXHRByIyUlOBkZOxFSMzQnKhwRdDVGJzgoOSstLh8CTC8RT/xAAbAQEAAgMBAQAAAAAAAAAAAAAAAUCAwYBB//EADQRAQACAQIEBAQEBgIDAAAAAAABAgMEEQUhMVESEyJBFDJhcRVSgZEGM0KhsdEjwTRD4f/aAAwDAQACEQMRAD8A7OAAAAAAAAAAAAAAAAAAAAAAAAADw47TGGo+mvrg/NcltexbzXbLSvWW/Fpc2T5K7tLiNfMDHPZdtmXm1tJ/zZGidZjhPpwbU267R93jl4RaObD3PtcF+Jh8fTs3/AIFl/NCY+ETD8+HvXY4P8R8dTsTwLL7Wh7cNr1gZ5KUrK2/PreXtjmbK6zFPVGvwbU16RE/Zu8FpOi/fRdXZ1Rmm/ZxN9clbdJQcuny4/nrs9Zm0gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABW9Pa44bC7UIfP3LdsQixf60ub1Zsi5dVSnTnKz0nCsuf1Tyj6/8ASi6V1rxmJzTt5Kt/m6c4LLrfF+0r8mqyX99nRafheDDz23n6tH8SPvM9VhERHKAPQAAAmLaaabTXBp5NCJ26MZrFo2lYNE644zD5KU+XrX1LW3LLqnx9uZJxavJTl1Vuo4Tgy86+mfov2gtaMNjMoxlyd3oZ7pP7L4S9RZYtRTJ93Oarh2XT85jeO8N2b0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADHicRCqErLJKEILOUpPJJHk2iI3llWs2mIr1cn1r1knjZ7MG44aD8SHBzfny6+hcxT6jP5k7R0djw7h9dPXxT80/2V8jLJIegAAAzAZgAAAAI58njoepeqXJ7OLxcfnN0qqZLyOiUl53VzdvCy02m29VnM8T4n498WKeXvPddywUAAAAAAAAAAAAAAABAEgAAAAAAAAAAAAAc58IOn3ZN4KqXzdb+ea+tPzOxfHsKzWZ958Ff1dPwfQ+GvnXjnPT/AGpZAX6AJAgH3WTQmpuKxKU55UVPepWJ7cl1Q4+3IlYdJe/OeUKrVcWw4fTX1T9FxwGo2Cory5SM75Lnsk1H+WOSJtNHjjrzUeXjOovPKdvs22Wg8HDycLQv4UH8Ub4w0j2Q7avPbref3RdoHBz8rC0P+FFP2oThxz1grrM9el5/dptIah4OxN07dEubZk5wz+zL8GiPfR47dOSdh41npPq5wpWndVsTg85yirKV+nqzaS/WXGPwIObTXx/ZfaTieHUct9rdmkI/PosOW27oepeqXJ7OLxcfnPKqpf5vonJed1c3bws9NpfD6rOZ4nxPx74sUuXvPfdywUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPDprFSqoslXlyri4158Ntrc38fUQ9dq66bF45/RI0uOMmWIt093F8RXOM5KxNTzbltcW3z9ZTUyRkjxRO+7usc1mseHoxGbYAfUIuTUYpuUmkklm23wIERvyhja0ViZno6VqnqfChRxGKip4jjGt74Vd8i10+livqt1crxDilsszTFyr3/lbyapQAAAAQ0nmms09zT4MS9iZid4aLDap4SvEvFRhv4xq3clCfPNL_AFIj101Iv4oT78SznxeVM/r7t8SFeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACt6xYjasjWuFazf2n/jI47j+p8eaMcdK/5W2hx+Gvi7tBj8DXfHZmt68ma8qJT4dRfFO9VnizWxzyVPSGj50PKSzi/JmvJfcy+wammaN46rbFnrkjk8hJb1/wDB5oBZf/ddHNvNURfMuDs7eZevpLLR4I28c/o5rjOu3nyaT9/9L2WDngAAAAAAAAAAAAAAAAAAAAAAAAAAIAkAAAAAAAAAAAADPJnaNyFKxVm3ZOfnSb9Wewc3t2b406N2W4f+G+YVnFv5H6xM0P8x000twAAAAAAAAAAAAQBIAAAAAAAAAAAAYMfHOq1dNcvgRNdXxae9e8S24Z2yRP1Uw+cr8AAbjVqeVlkfOgn7H/k6L+Hcm2a1e8IGvr6YlYjr1UAAAGDH/Q3D9Wn0szxfPH3hhf5ZcRnMdtXPpAAAAAAAAtPg5hnjZPzcPZ98oIq+LT/wAMR3lN0Mf8jpZza2AAAAAAAAAAAAQBIAAAAAAAAAAAARJZprp3GN6+Ksw9idp3Ui2GzKUX9WTj7HkfNc1PBe1e0ugpbxViXyamYewfV5cPrDXRiakvGjtqNss/FjF7n25cfUdBwjSZKZIzW5R/lz/EOLYonyq8+89nREdg1wAAAGO+vbhOGeW3GUc+jNZHtbeGYl5aN42U1eD2v9Kn7uPeXH4xf8qD8BXun8ntf6VP3ce8fjF/y/3PgI7n5Pa/0qz3ce8fjF/y/3e/AR3eTSupVWHuveJm+Sg5KLritp8y487yNuLil8l4pFerXk0daVm2/RSy6V4egeC6+DKnx8VbzKFcF2ttv4IpOMX5UqsNBHOZX8olmAAAAAAAAAAACAJAAAAAAAAAAAAABVtPUbFzlzWLaXbwf+9ZxHG8HlamZjpbmudHfxY9uzWWWKKcpNRit7b4FRSk3naIb8mSuOs2tO0Qrmk9MSszhVnGvg3wlLuR0ej4ZXH68nOXIcS4zbNvTFyr3/5Wpa4ULp+o2mmiKFRN/P4eKi8+M6+EZfg/8k3DfxRtK+0Oo8ymhnrCzG5PAAAAAAAACl+EbSiVcMHF+NY1ZZ1QT8VPte/1FxwjBvfzZ6R0QNbl5eCHPzoFWAAOneD7B8ng+Ua332Ss/dWUV8G1WczxTJ4s22bkuNFTw49+6zFalgAAAAAAAAAAAgSQAAAAAAAAAAAAAavWKjaoinYouUqU7FFeVJJb0vV8Cr4rofisUbdY6f8Abdh1Hkb222cox+Pnc85PKK8mC4LvZE0uipp68uvvLm9dxDLqreqeXZ5SYrwD0aPxtmHthdVLZnB5roa54vpTPa2ms7w2Y8lsdotV1fV7TtWNr2oNRtivnKW/Gi+ldMesn0yRaHQ6fU1zV5dW2M0kAAAAADWaf01Vg6nObznLNV1J+NOX4LpZJ02ltnt4Y6e7TmzVxxvLkuOxc77J3WvanY82+bsXUjq8WOuOkVr0hSXvNrbywGxiAZsHhpXWV0w8uySgu1via8mSMdJtPsypXxWirtOEw8aq66oeTXCMF2JZHHZLze02n3X9a+GNmUwZAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOVa5aEeFvc4L/j3tyhlwjLjKHd1dhBzU8Mue1un8q+8dJV81IQAAy4bEzqnGyqcoTjvUovJo9iZid4Z0vak71nmvOhdfItKGNhsy4ctWs4v7UeK9WZJpnjpK1wcSjpk/dbsHpCi9bVNtdi/Vkm12rijfFonpKyplpeN4l6TJsAPni8fTStq62utfrzSfqXOYzaI6y13y0pG9pVTTOvlcU4YOHKT9LONa60uMvuNN88eyvz8RrHKnNRcZjLL5ytum52S4yfR0Jcy7C+4XxTH4fKybRPfurvPm8+pgOiZAAC7+DvQ+bljbFuWddOfO/rT/D2lHxXU/wDqj9VjosP9cr6UayAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPJpXR1eJqnRas4zW5rjGXNJdaMbVi0bS1ZsUZKzWXI9MaLtwlsqbVw3xmvJnHmkiBel1nZzmbDbFbw2eExaQAAAmLaeaeTXOtzG2z2J25w9dWlsTHdHE3pdCtnl8TLx27tkZskf1SW6VxM/LxN8up2z7x47dyc2Sf6peSTzebeb6XvZju1zMzzlAAPE5l3w/i9sPoy869+zZXJt1DrMeWmSvipO8N/VtNXdCzxlyrjmq45O2zzY9C63zGjV6qMFN/f2b8GGclvo65hqIVwhXXFRhCKjGK5kjlL2m20ntPVd1rFY2hkMXoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAc3/AIgGjFhMOJkruu6f8eH2F9w2fV2qIeY45Xm0jL2cWz7F+gC+gAAVQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC7+Dhoyq/F5vj8jD3t9/1fxzRXxPL+b6I6LD/m+/pZq0qAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYce/Lw2I+dCv2pnnx+tQyxdp2cvp+XN2fMv0AZrJbAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC/7P/AJWD9T/tRVxX975f9LHQ/wCX7y9K1LAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQ/T6j5WHy/sTzZfXP3Tz4e0py2fMv0AZrJbAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC/7P/lj1P+1FzFf3pl/0sdD/AJfeXtWpYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH6fX5WHy/sTzZfXP3TzYf2pys/Mv0AZpJIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC/7P/lj1P+1FzFf3pl/0sdD/AJfeXtWpYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH6fX5WHy/sTzZfXP3TzYf2pys/Mv0AZpJIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC/7P/lj1P+1FzFf3pl/0sdD/AJfeXtWpYAAAAAAAAAAAAAAAAAAAAAAAAAAP/Z" alt="Google" title="Login with Google" onerror="this.onerror=null;this.src='https://placehold.co/38x38/E0E0E0/333333?text=G';">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_(2019).png" alt="Facebook" title="Login with Facebook" onerror="this.onerror=null;this.src='https://placehold.co/38x38/E0E0E0/333333?text=F';">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYEVmD46qd2zYz7t8LksHKJn1ASnP8EW6HIQ&s" alt="Twitter" title="Login with Twitter" onerror="this.onerror=null;this.src='https://placehold.co/38x38/E0E0E0/333333?text=T';">
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Cart Icon -->
+  <div id="floatingCart" onclick="showCart()">
+      🛒
+      <span class="cart-count">0</span>
+  </div>
+
+  <!-- Cart Container Overlay -->
+  <div id="cartContainer" class="cart-container">
+    <div class="cart-content">
+      <span class="close-btn" onclick="hideCart()">×</span>
+      <div class="breadcrumb" id="cartBreadcrumb">Home / Cart</div>
+
+      <!-- Cart View -->
+      <div id="cartView">
+        <div class="cart-header">
+          <h2>Shopping Cart</h2>
+          <button class="continue-btn" onclick="hideCart()">← Continue Shopping</button>
+        </div>
+
+        <div class="cart-items-list" id="cartItemsList">
+          <!-- Cart items will be dynamically added here -->
+        </div>
+
+        <div class="cart-empty" id="cartEmptyMessage">
+          <h3>Product Not Found</h3>
+          <p>Please add some products</p>
+        </div>
+
+        <div class="order-summary">
+          <h4>Order Summary</h4>
+          <div class="discount-row">
+            <input type="text" placeholder="Discount Code" id="discount-code">
+            <button onclick="applyDiscount()">Apply</button>
+          </div>
+          <div class="summary-item"><span>Subtotal</span><span id="subtotalPrice">BDT 0</span></div>
+          <div class="summary-item"><span>VAT Included (15%)</span><span id="vatPrice">BDT 0.00</span></div>
+          <div class="summary-item"><span>Discounted Amount</span><span id="discountedAmount">BDT 0</span></div>
+          <div class="summary-item total"><strong>Order Total</strong><strong id="orderTotalPrice">BDT 0</strong></div>
+          <button class="checkout-btn" onclick="proceedToPayment()">Proceed to Checkout</button>
+        </div>
+      </div>
+
+      <!-- Payment View -->
+      <div id="paymentView" style="display: none;">
+        <div class="cart-header">
+            <h2 id="paymentViewHeader">Payment Details</h2>
+            <button class="continue-btn" onclick="hideCart()">← Continue Shopping</button>
+        </div>
+
+        <form id="paymentForm" class="payment-form-section">
+            <!-- Billing Details Section -->
+            <div id="billingDetailsSection">
+                <h4>Customer & Billing Information</h4>
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" placeholder="Your First Name" required>
+
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" placeholder="Your Last Name" required>
+
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" placeholder="e.g., +8801XXXXXXXXX" required pattern="^\+?[0-9]{10,14}$">
+
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="you@example.com" required>
+
+                <label for="address">Address</label>
+                <input type="text" id="address" placeholder="Street Address" required>
+
+                <label for="city">City</label>
+                <input type="text" id="city" placeholder="City" required>
+
+                <label for="zip">Zip Code</label>
+                <input type="text" id="zip" placeholder="XXXXX" required maxlength="5">
+
+                <p id="billingErrorMessage" style="color: red; text-align: center; margin-top: 10px; display: none;"></p>
+                <button type="button" class="checkout-btn" onclick="goToPaymentMethod()">Next</button>
+            </div>
+
+            <!-- Payment Method Section (initially hidden) -->
+            <div id="paymentMethodSection" style="display: none;">
+                <h4>Payment Method</h4>
+                <label for="paymentMethod">Choose Method</label>
+                <select id="paymentMethod" required onchange="handlePaymentMethodChange()">
+                    <option value="">Select a payment method</option>
+                    <option value="bKash">bKash</option>
+                    <option value="Nagad">Nagad</option>
+                    <option value="Rocket">Rocket</option>
+                    <option value="cashOnDelivery">Cash on Delivery</option>
+                </select>
+
+                <label for="paymentPhoneNumber" id="paymentPhoneNumberLabel" style="display: none;">Phone Number (for Mobile Banking)</label>
+                <input type="tel" id="paymentPhoneNumber" placeholder="e.g., +8801XXXXXXXXX" pattern="^\+?[0-9]{10,14}$" style="display: none;">
+
+                <label for="transactionId" id="transactionIdLabel" style="display: none;">Transaction ID</label>
+                <input type="text" id="transactionId" placeholder="Enter transaction ID" style="display: none;">
+
+                <label for="cardNumber" id="cardNumberLabel" style="display: none;">Card Number</label>
+                <input type="text" id="cardNumber" placeholder="•••• •••• •••• ••••" maxlength="19" style="display: none;">
+
+                <label for="cardExpiry" id="cardExpiryLabel" style="display: none;">Expiry Date (MM/YY)</label>
+                <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" style="display: none;">
+
+                <label for="cardCvv" id="cardCvvLabel" style="display: none;">CVV</label>
+                <input type="text" id="cardCvv" placeholder="•••" maxlength="4" style="display: none;">
+
+                <p id="paymentDetailsErrorMessage" style="color: red; text-align: center; margin-top: 10px; display: none;"></p>
+                <button type="button" class="continue-btn" onclick="backToBillingDetails()">← Back</button>
+                <button type="submit" class="checkout-btn">Place Order</button>
+            </div>
+        </form>
+
+        <div id="orderConfirmationMessage" style="display: none;">
+            <!-- Order confirmation/error message will be displayed here -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Dark Mode Toggle
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+    }
+
+    // Toggle Login Form: Show/hide login overlay
+    function toggleLoginForm() {
+      const loginOverlay = document.getElementById("loginFormOverlay");
+      if (loginOverlay.style.display === "flex") {
+        loginOverlay.style.display = "none";
+        // Clear login error message when closing the form
+        const loginErrorMessage = document.getElementById('loginErrorMessage');
+        if (loginErrorMessage) {
+            loginErrorMessage.remove();
+        }
+      } else {
+        loginOverlay.style.display = "flex";
+        // Clear login input fields when opening the form
+        document.getElementById('loginEmailOrNumber').value = '';
+        document.getElementById('loginPassword').value = '';
+      }
+    }
+
+    // Close Login Form when clicking outside the form or close button
+    function closeLoginForm() {
+      const loginOverlay = document.getElementById("loginFormOverlay");
+      loginOverlay.style.display = "none";
+      // Clear login error message when closing the form
+      const loginErrorMessage = document.getElementById('loginErrorMessage');
+        if (loginErrorMessage) {
+            loginErrorMessage.remove();
+        }
+    }
+
+    // Elements
+    const searchInput = document.getElementById("searchInput");
+    const categoryFilter = document.getElementById("categoryFilter");
+    const sortSelect = document.getElementById("sortSelect");
+    const productGrid = document.getElementById("productGrid");
+    const subcategoryCardsContainer = document.getElementById("subcategoryCardsContainer");
+
+    // Cart elements
+    const cartContainer = document.getElementById("cartContainer");
+    const cartCountSpan = document.querySelector("#floatingCart .cart-count");
+    const cartItemsList = document.getElementById("cartItemsList");
+    const cartEmptyMessage = document.getElementById("cartEmptyMessage");
+    const subtotalPriceSpan = document.getElementById("subtotalPrice");
+    const vatPriceSpan = document.getElementById("vatPrice");
+    const discountedAmountSpan = document.getElementById("discountedAmount");
+    const orderTotalPriceSpan = document.getElementById("orderTotalPrice");
+
+    // Login/Logout elements
+    const loginLogoutLink = document.getElementById('loginLogoutLink');
+    const loginButton = document.getElementById('loginButton');
+    const loginEmailOrNumberInput = document.getElementById('loginEmailOrNumber');
+    const loginPasswordInput = document.getElementById('loginPassword');
+
+    // Payment Section elements
+    const cartView = document.getElementById('cartView');
+    const paymentView = document.getElementById('paymentView');
+    const cartBreadcrumb = document.getElementById('cartBreadcrumb');
+    const paymentForm = document.getElementById('paymentForm');
+    const orderConfirmationMessage = document.getElementById('orderConfirmationMessage');
+
+    const billingDetailsSection = document.getElementById('billingDetailsSection');
+    const paymentMethodSection = document.getElementById('paymentMethodSection');
+    const billingErrorMessage = document.getElementById('billingErrorMessage');
+    const paymentDetailsErrorMessage = document.getElementById('paymentDetailsErrorMessage');
+    const paymentViewHeader = document.getElementById('paymentViewHeader');
+
+    // New Payment fields
+    const firstNameInput = document.getElementById('firstName');
+    const lastNameInput = document.getElementById('lastName');
+    const phoneInput = document.getElementById('phone');
+    const emailInput = document.getElementById('email');
+    const addressInput = document.getElementById('address');
+    const cityInput = document.getElementById('city');
+    const zipInput = document.getElementById('zip');
+
+    const paymentMethodSelect = document.getElementById('paymentMethod');
+    const paymentPhoneNumberLabel = document.getElementById('paymentPhoneNumberLabel');
+    const paymentPhoneNumberInput = document.getElementById('paymentPhoneNumber');
+    const transactionIdLabel = document.getElementById('transactionIdLabel');
+    const transactionIdInput = document.getElementById('transactionId');
+    const cardNumberLabel = document.getElementById('cardNumberLabel');
+    const cardNumberInput = document.getElementById('cardNumber');
+    const cardExpiryLabel = document.getElementById('cardExpiryLabel');
+    const cardExpiryInput = document.getElementById('cardExpiry');
+    const cardCvvLabel = document.getElementById('cardCvvLabel');
+    const cardCvvInput = document.getElementById('cardCvv');
+
+
+    // Array to store cart items
+    let cartItems = [];
+
+    // Define category mappings
+    const categoryMappings = {
+        "initial": [
+            { value: "all", text: "All Products" },
+            { value: "other", text: "Other (Electronics, Beauty, Toy)" } // Grouping non-fashion
+        ],
+        "men": [
+            { value: "all-men", text: "All Men's Fashion" },
+            { value: "men-shirt", text: "Shirts" },
+            { value: "men-pant", text: "Pants" },
+            { value: "men-shoe", text: "Shoes" },
+            { value: "men-polo-tshirt", text: "Polo T-Shirts" }
+        ],
+        "women": [
+            { value: "all-women", text: "All Women's Fashion" },
+            { value: "women-dress", text: "Dresses" },
+            { value: "women-threepiece", text: "Three Pieces" },
+            { value: "women-watch", text: "Watches" }
+        ],
+        "kids": [
+            { value: "all-kids", text: "All Kids' Fashion" },
+            { value: "kids-tshirt", text: "T-Shirts" }
+        ]
+    };
+
+    // Function to populate the category dropdown
+    function populateCategoryDropdown(options) {
+        categoryFilter.innerHTML = ''; // Clear existing options
+        options.forEach(optionData => {
+            const option = document.createElement('option');
+            option.value = optionData.value;
+            option.textContent = optionData.text;
+            categoryFilter.appendChild(option);
+        });
+    }
+
+    // Event listener for main category filter dropdown
+    categoryFilter.addEventListener("change", () => {
+      // When the dropdown changes, clear any active subcategory card highlights
+      clearActiveSubcategoryCards();
+      filterAndSortProducts();
+    });
+
+    // Event listeners for subcategory cards
+    if (subcategoryCardsContainer) {
+        subcategoryCardsContainer.querySelectorAll('.subcategory-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const filterCategory = card.dataset.filter; // e.g., "men", "women", "kids"
+
+                // Populate the dropdown with specific options for the clicked subcategory
+                populateCategoryDropdown(categoryMappings[filterCategory]);
+
+                // Set the dropdown's value to the "All [Category] Fashion" option
+                categoryFilter.value = `all-${filterCategory}`;
+
+                // Update active state for subcategory cards
+                clearActiveSubcategoryCards();
+                card.classList.add('active');
+
+                // Re-filter products
+                filterAndSortProducts();
+            });
+        });
+    }
+
+    // Function to clear active class from all subcategory cards
+    function clearActiveSubcategoryCards() {
+        if (subcategoryCardsContainer) {
+            subcategoryCardsContainer.querySelectorAll('.subcategory-card').forEach(card => {
+                card.classList.remove('active');
+            });
+        }
+    }
+
+    // Trigger filter/sort on input change
+    searchInput.addEventListener("input", filterAndSortProducts);
+    sortSelect.addEventListener("change", filterAndSortProducts);
+
+
+    // Main filter/sort function
+    function filterAndSortProducts() {
+      const searchText = searchInput.value.toLowerCase();
+      const selectedFilterOption = categoryFilter.value; // e.g., "all", "other", "all-men", "men-shirt"
+      const sortOrder = sortSelect.value;
+
+      const products = Array.from(productGrid.getElementsByClassName("product-card"));
+
+      products.forEach(product => {
+        const name = product.querySelector("h3").textContent.toLowerCase();
+        const productCategory = product.dataset.category; // e.g., "men-shirt", "electronics"
+        const priceText = product.querySelector("p").textContent;
+        const price = parseFloat(priceText.replace(/[^\d.]/g, '')) || 0;
+        product.dataset.price = price; // Update data-price for sorting reliability
+
+        let isVisible = name.includes(searchText);
+
+        if (selectedFilterOption === "all") {
+            // "All Products" selected, show everything
+        } else if (selectedFilterOption === "other") {
+            // Show only products explicitly marked as 'electronics', 'beauty', 'toy'
+            if (!['electronics', 'beauty', 'toy'].includes(productCategory)) {
+                isVisible = false;
+            }
+        } else if (selectedFilterOption.startsWith("all-")) {
+            // e.g., "all-men", "all-women", "all-kids"
+            const groupKey = selectedFilterOption.substring(4); // "men", "women", "kids"
+            // Filter products whose category starts with the group key
+            if (!productCategory.startsWith(groupKey)) {
+                isVisible = false;
+            }
+        } else {
+            // Specific category selected (e.g., "men-shirt", "women-dress")
+            if (productCategory !== selectedFilterOption) {
+                isVisible = false;
+            }
+        }
+
+        product.style.display = isVisible ? "block" : "none";
+      });
+
+      // Sort visible products by price
+      let visibleProducts = products.filter(p => p.style.display !== "none");
+
+      if (sortOrder === "low-high") {
+        visibleProducts.sort((a, b) => parseFloat(a.dataset.price) - parseFloat(b.dataset.price));
+      } else if (sortOrder === "high-low") {
+        visibleProducts.sort((a, b) => parseFloat(b.dataset.price) - parseFloat(a.dataset.price));
+      }
+
+      // Re-append sorted products
+      visibleProducts.forEach(product => productGrid.appendChild(product));
+    }
+
+    // --- Cart Functionality ---
+
+    // Add product to cart
+    function addToCart(event) {
+        const productCard = event.target.closest('.product-card');
+        const productId = productCard.dataset.productId;
+        const productName = productCard.querySelector('h3').textContent;
+        const productPrice = parseFloat(productCard.dataset.price);
+        const productImage = productCard.querySelector('img').src;
+        const isVatIncluded = productCard.querySelector('p').textContent.includes('+VAT');
+
+
+        const existingItemIndex = cartItems.findIndex(item => item.id === productId);
+
+        if (existingItemIndex > -1) {
+            // Product already in cart, increment quantity
+            cartItems[existingItemIndex].quantity++;
+        } else {
+            // Add new product to cart
+            cartItems.push({
+                id: productId,
+                name: productName,
+                price: productPrice,
+                image: productImage,
+                quantity: 1,
+                vat: isVatIncluded ? 0.15 : 0 // 15% VAT for items with +VAT
+            });
+        }
+
+        updateCartUI(); // Update the cart display and totals
+        saveCartToLocalStorage();
+    }
+
+    // Remove item from cart
+    function removeFromCart(productId) {
+        cartItems = cartItems.filter(item => item.id !== productId);
+        updateCartUI();
+        saveCartToLocalStorage();
+    }
+
+    // Update item quantity in cart
+    function updateQuantity(productId, newQuantity) {
+        const item = cartItems.find(item => item.id === productId);
+        if (item) {
+            item.quantity = parseInt(newQuantity, 10);
+            if (item.quantity <= 0) {
+                removeFromCart(productId); // Remove if quantity drops to 0 or less
+            }
+        }
+        updateCartUI();
+        saveCartToLocalStorage();
+    }
+
+    // Render cart items and update totals
+    function updateCartUI() {
+        cartItemsList.innerHTML = ''; // Clear current cart display
+        let subtotal = 0;
+        let vatTotal = 0;
+        let totalDiscount = 0;
+
+        if (cartItems.length === 0) {
+            cartEmptyMessage.style.display = 'block';
+            cartItemsList.style.display = 'none';
+        } else {
+            cartEmptyMessage.style.display = 'none';
+            cartItemsList.style.display = 'flex'; // Ensure flex for column layout
+            cartItems.forEach(item => {
+                const itemTotalPrice = item.price * item.quantity;
+                subtotal += itemTotalPrice;
+
+                // Calculate VAT for items marked with +VAT
+                if (item.vat > 0) {
+                    vatTotal += item.price * item.quantity * item.vat;
+                }
+
+                const cartItemHTML = `
+                    <div class="cart-item">
+                        <img src="${item.image}" alt="${item.name}">
+                        <div class="cart-item-details">
+                            <h4>${item.name}</h4>
+                            <p>BDT ${item.price.toFixed(2)} each</p>
+                        </div>
+                        <div class="cart-item-quantity">
+                            <button onclick="updateQuantity('${item.id}', ${item.quantity - 1})">-</button>
+                            <input type="number" value="${item.quantity}" min="1" onchange="updateQuantity('${item.id}', this.value)">
+                            <button onclick="updateQuantity('${item.id}', ${item.quantity + 1})">+</button>
+                        </div>
+                        <span class="cart-item-total-price">BDT ${(itemTotalPrice + (item.vat > 0 ? item.price * item.quantity * item.vat : 0)).toFixed(2)}</span>
+                        <button class="remove-item-btn" onclick="removeFromCart('${item.id}')">×</button>
+                    </div>
+                `;
+                cartItemsList.insertAdjacentHTML('beforeend', cartItemHTML);
+            });
+        }
+
+        // Apply discount (dummy logic for now)
+        const discountCode = document.getElementById("discount-code").value.trim().toUpperCase();
+        if (discountCode === "SAVE10") {
+            totalDiscount = subtotal * 0.10; // 10% discount
+        } else if (discountCode === "SAVE50") {
+            totalDiscount = subtotal * 0.50; // 50% discount
+        }
+
+
+        const orderTotal = subtotal + vatTotal - totalDiscount;
+
+        subtotalPriceSpan.textContent = `BDT ${orderTotal.toFixed(2)}`; // Updated to reflect total directly
+        vatPriceSpan.textContent = `BDT ${vatTotal.toFixed(2)}`;
+        discountedAmountSpan.textContent = `BDT ${totalDiscount.toFixed(2)}`;
+        orderTotalPriceSpan.textContent = `BDT ${orderTotal.toFixed(2)}`;
+        cartCountSpan.textContent = cartItems.reduce((total, item) => total + item.quantity, 0);
+    }
+
+    // Function to save cart items to local storage
+    function saveCartToLocalStorage() {
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    }
+
+    // Function to load cart items from local storage
+    function loadCartFromLocalStorage() {
+        const storedCartItems = localStorage.getItem('cartItems');
+        if (storedCartItems) {
+            cartItems = JSON.parse(storedCartItems);
+            updateCartUI(); // Update UI with loaded items
+        }
+    }
+
+    // Show/hide cart overlay
+    function showCart() {
+        cartContainer.style.display = 'flex';
+        // Ensure the cart view is shown initially when the cart is opened
+        cartView.style.display = 'block';
+        paymentView.style.display = 'none';
+        cartBreadcrumb.textContent = 'Home / Cart';
+        orderConfirmationMessage.style.display = 'none'; // Hide confirmation on re-opening cart
+        paymentForm.style.display = 'block'; // Ensure form is visible if user goes back
+        paymentForm.reset(); // Clear form fields
+        billingErrorMessage.style.display = 'none'; // Hide error messages
+        paymentDetailsErrorMessage.style.display = 'none';
+        // Reset to billing details section
+        billingDetailsSection.style.display = 'block';
+        paymentMethodSection.style.display = 'none';
+        paymentViewHeader.textContent = 'Payment Details';
+        updateCartUI(); // Ensure cart is updated when opened
+    }
+
+    function hideCart() {
+        cartContainer.style.display = 'none';
+    }
+
+    // Dummy applyDiscount function (you'll need to implement actual discount logic)
+    function applyDiscount() {
+        // The logic for applying discount is now integrated into updateCartUI
+        // Just calling updateCartUI will re-evaluate based on the input field
+        updateCartUI();
+    }
+
+
+    // Event listeners for "Add to Cart" buttons
+    productGrid.addEventListener('click', (event) => {
+        if (event.target.classList.contains('add-to-cart-btn')) {
+            addToCart(event);
+        }
+    });
+
+    // --- Login/Logout Functionality ---
+
+    // Function to display an error message in the login form
+    function displayLoginError(message) {
+        let loginErrorMessage = document.getElementById('loginErrorMessage');
+        if (!loginErrorMessage) {
+            loginErrorMessage = document.createElement('p');
+            loginErrorMessage.id = 'loginErrorMessage';
+            loginErrorMessage.style.color = '#dc3545';
+            loginErrorMessage.style.textAlign = 'center';
+            loginErrorMessage.style.marginTop = '10px';
+            loginErrorMessage.style.marginBottom = '-10px';
+            document.getElementById('loginForm').insertBefore(loginErrorMessage, loginButton);
+        }
+        loginErrorMessage.textContent = message;
+    }
+
+    // Simulate login
+    function loginUser() {
+        const username = loginEmailOrNumberInput.value.trim();
+        const password = loginPasswordInput.value.trim();
+
+        // Simple hardcoded credentials for demonstration
+        if (username === "user@example.com" && password === "password123") {
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('loggedInUser', username);
+            updateLoginStateUI();
+            closeLoginForm();
+        } else {
+            displayLoginError('Invalid email/number or password.');
+        }
+    }
+
+    // Simulate logout
+    function logoutUser() {
+        localStorage.removeItem('isLoggedIn');
+        localStorage.removeItem('loggedInUser');
+        updateLoginStateUI();
+    }
+
+    // Update the UI based on login state
+    function updateLoginStateUI() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        const loginIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>`;
+        const logoutIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M17 7L15.59 8.41l1.59 1.59H9c-1.1 0-2 .9-2 2v1c0 1.1.9 2 2 2h8.18l-1.59 1.59L17 17l4-4-4-4zm-8 4V5H3v14h6v-6c0-.55-.45-1-1-1s-1 .45-1 1v5h-2V6h2v4c0 .55.45 1 1 1s1-.45 1-1z"/></svg>`;
+
+
+        if (isLoggedIn) {
+            loginLogoutLink.innerHTML = `${logoutIcon} Logout (${loggedInUser.split('@')[0]})`;
+            loginLogoutLink.onclick = logoutUser; // Change to logout function
+        } else {
+            loginLogoutLink.innerHTML = `${loginIcon} Login`;
+            loginLogoutLink.onclick = toggleLoginForm; // Change back to show login form
+        }
+    }
+
+    // Event listener for the login button inside the form
+    if (loginButton) {
+        loginButton.addEventListener('click', loginUser);
+    }
+
+    // --- Payment Section Logic ---
+
+    function proceedToPayment() {
+        if (cartItems.length === 0) {
+            // Use a custom message instead of alert()
+            orderConfirmationMessage.innerHTML = '<h4>Cart Empty!</h4><p>Please add items to your cart before proceeding to checkout.</p><button class="continue-btn" onclick="hideCart();">Close</button>';
+            orderConfirmationMessage.style.display = 'block';
+            paymentForm.style.display = 'none'; // Ensure form is hidden
+            cartView.style.display = 'none'; // Hide cart view to show only message
+            return;
+        }
+        cartView.style.display = 'none';
+        paymentView.style.display = 'block';
+        cartBreadcrumb.textContent = 'Home / Cart / Checkout';
+        // Clear any previous messages when transitioning to payment view
+        billingErrorMessage.style.display = 'none';
+        paymentDetailsErrorMessage.style.display = 'none';
+        orderConfirmationMessage.style.display = 'none';
+        paymentForm.reset(); // Clear form fields
+        // Show billing details section first
+        billingDetailsSection.style.display = 'block';
+        paymentMethodSection.style.display = 'none';
+        paymentViewHeader.textContent = 'Payment Details';
+    }
+
+    function goToPaymentMethod() {
+        // Validate billing details before proceeding
+        const firstName = firstNameInput.value.trim();
+        const lastName = lastNameInput.value.trim();
+        const phone = phoneInput.value.trim();
+        const email = emailInput.value.trim();
+        const address = addressInput.value.trim();
+        const city = cityInput.value.trim();
+        const zip = zipInput.value.trim();
+
+        if (!firstName || !lastName || !phone || !email || !address || !city || !zip) {
+            billingErrorMessage.textContent = 'Please fill in all customer and billing details.';
+            billingErrorMessage.style.display = 'block';
+            return;
+        }
+
+        // Basic phone number validation (simple regex for digits and optional +)
+        const phoneRegex = /^\+?[0-9]{10,14}$/;
+        if (!phoneRegex.test(phone)) {
+            billingErrorMessage.textContent = 'Please enter a valid phone number (e.g., +8801XXXXXXXXX).';
+            billingErrorMessage.style.display = 'block';
+            return;
+        }
+
+        // Basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            billingErrorMessage.textContent = 'Please enter a valid email address.';
+            billingErrorMessage.style.display = 'block';
+            return;
+        }
+
+        billingErrorMessage.style.display = 'none'; // Hide error if validation passes
+        billingDetailsSection.style.display = 'none';
+        paymentMethodSection.style.display = 'block';
+        cartBreadcrumb.textContent = 'Home / Cart / Checkout / Payment Method';
+        paymentViewHeader.textContent = 'Choose Payment Method';
+        // Ensure initial state for payment method fields is correct
+        handlePaymentMethodChange();
+    }
+
+    function backToBillingDetails() {
+        billingDetailsSection.style.display = 'block';
+        paymentMethodSection.style.display = 'none';
+        cartBreadcrumb.textContent = 'Home / Cart / Checkout';
+        paymentViewHeader.textContent = 'Payment Details';
+    }
+
+    function handlePaymentMethodChange() {
+        const selectedMethod = paymentMethodSelect.value;
+
+        // Hide all payment method specific fields initially
+        paymentPhoneNumberLabel.style.display = 'none';
+        paymentPhoneNumberInput.style.display = 'none';
+        paymentPhoneNumberInput.removeAttribute('required'); // Remove required
+        paymentPhoneNumberInput.value = ''; // Clear value
+
+        transactionIdLabel.style.display = 'none';
+        transactionIdInput.style.display = 'none';
+        transactionIdInput.removeAttribute('required'); // Remove required
+        transactionIdInput.value = ''; // Clear value
+
+        cardNumberLabel.style.display = 'none';
+        cardNumberInput.style.display = 'none';
+        cardNumberInput.removeAttribute('required');
+        cardNumberInput.value = '';
+
+        cardExpiryLabel.style.display = 'none';
+        cardExpiryInput.style.display = 'none';
+        cardExpiryInput.removeAttribute('required');
+        cardExpiryInput.value = '';
+
+        cardCvvLabel.style.display = 'none';
+        cardCvvInput.style.display = 'none';
+        cardCvvInput.removeAttribute('required');
+        cardCvvInput.value = '';
+
+        if (selectedMethod === 'bKash' || selectedMethod === 'Nagad' || selectedMethod === 'Rocket') {
+            paymentPhoneNumberLabel.style.display = 'block';
+            paymentPhoneNumberInput.style.display = 'block';
+            paymentPhoneNumberInput.setAttribute('required', 'required');
+
+            transactionIdLabel.style.display = 'block';
+            transactionIdInput.style.display = 'block';
+            transactionIdInput.setAttribute('required', 'required');
+        }
+        // Cash on Delivery requires no extra fields
+    }
+
+
+    async function placeOrder(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        paymentDetailsErrorMessage.style.display = 'none'; // Hide previous error
+        orderConfirmationMessage.style.display = 'none'; // Hide previous confirmation
+
+        // Validate payment method specific fields
+        const selectedMethod = paymentMethodSelect.value;
+        if (!selectedMethod) {
+            paymentDetailsErrorMessage.textContent = 'Please select a payment method.';
+            paymentDetailsErrorMessage.style.display = 'block';
+            return;
+        }
+
+        if (selectedMethod === 'bKash' || selectedMethod === 'Nagad' || selectedMethod === 'Rocket') {
+            const paymentPhoneNumber = paymentPhoneNumberInput.value.trim();
+            const transactionId = transactionIdInput.value.trim();
+            if (!paymentPhoneNumber || !transactionId) {
+                paymentDetailsErrorMessage.textContent = `Please provide ${selectedMethod} phone number and transaction ID.`;
+                paymentDetailsErrorMessage.style.display = 'block';
+                return;
+            }
+             // Basic phone number validation (simple regex for digits and optional +)
+            const phoneRegex = /^\+?[0-9]{10,14}$/;
+            if (!phoneRegex.test(paymentPhoneNumber)) {
+                paymentDetailsErrorMessage.textContent = 'Please enter a valid phone number (e.g., +8801XXXXXXXXX).';
+                paymentDetailsErrorMessage.style.display = 'block';
+                return;
+            }
+        }
+        // No specific validation for Cash on Delivery beyond selecting it
+
+        orderConfirmationMessage.innerHTML = '<div class="loading-spinner" style="display: block;"></div><p>Processing your order...</p>';
+        orderConfirmationMessage.style.display = 'block';
+        paymentForm.style.display = 'none'; // Hide form while processing
+
+        await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate network delay
+
+        const isPaymentSuccessful = Math.random() > 0.1; // 90% success rate
+
+        if (isPaymentSuccessful) {
+            orderConfirmationMessage.innerHTML = '<h4>Order Placed Successfully!</h4><p>Thank you for your purchase. Your order has been confirmed and will be processed shortly.</p><button class="continue-btn" onclick="hideCart(); backToCartView();">Continue Shopping</button>';
+            cartItems = []; // Clear cart after successful order
+            saveCartToLocalStorage();
+            updateCartUI(); // Update cart count to 0
+        } else {
+            orderConfirmationMessage.innerHTML = '<h4>Order Failed!</h4><p>There was an issue processing your payment. Please check your details and try again.</p><button class="continue-btn" onclick="paymentForm.style.display=\'block\'; orderConfirmationMessage.style.display=\'none\';">Try Again</button>';
+        }
+        orderConfirmationMessage.style.display = 'block';
+    }
+
+    // Event listener for the payment form submission
+    if (paymentForm) {
+        paymentForm.addEventListener('submit', placeOrder);
+    }
+
+    // Event listener for payment method selection change
+    if (paymentMethodSelect) {
+        paymentMethodSelect.addEventListener('change', handlePaymentMethodChange);
+    }
+
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        populateCategoryDropdown(categoryMappings.initial);
+        filterAndSortProducts();
+        loadCartFromLocalStorage();
+        updateLoginStateUI(); // Update login state on load
+    });
+  </script>
+</body>
+</html>
